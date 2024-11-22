@@ -1,0 +1,23 @@
+Vagrant.configure("2") do |config|
+    config.vm.box = "bandit145/centos_stream9_arm"
+    config.vm.network "private_network", ip: "192.168.56.57"
+    config.vm.network "public_network"
+    config.vm.provider "vmware_desktop" do |vb|
+      vb.gui = true
+      vb.memory = "1024"
+    end
+    config.vm.provision "shell", inline: <<-SHELL 
+       yum update -y 
+       yum install httpd wget unzip -y
+       systemctl start httpd
+       systemctl enable httpd
+      mkdir -p /tmp/website
+      cd /tmp/website
+      wget  https://www.tooplate.com/zip-templates/2133_moso_interior.zip
+      unzip -o 2133_moso_interior.zip
+      cp -r 2133_moso_interior/* /var/www/html/
+      sudo systemctl restart httpd
+      cd /tmp/
+      rm -rf website
+    SHELL
+end
