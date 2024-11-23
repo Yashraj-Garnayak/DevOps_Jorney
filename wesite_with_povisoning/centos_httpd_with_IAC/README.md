@@ -2,9 +2,8 @@
 
 # Automated Website Hosting with Vagrant  
 
-This project automates the hosting of a sample website on a CentOS Stream 9 virtual machine using Vagrant. Apache HTTP Server is used to serve the website.  
+This project automates the hosting of a sample website on a CentOS Stream 9 virtual machine using Vagrant. Apache HTTP Server is used to serve the website. 
 
----
 
 ## Requirements  
 
