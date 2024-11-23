@@ -1,0 +1,32 @@
+Vagrant.configure ("2") do |config|
+    subnet = "192.168.56."
+    startIP = 10
+    vm_configs={"node1"=>
+                    {
+                        "box"=>"spox/ubuntu-arm",
+                        "hostname"=>"node1",
+                        "provision"=>"ubuntu_script.sh",
+                        "is_special"=>true
+                    },
+                "node2"=>
+                    {
+                        "box" => "bandit145/centos_stream9_arm",
+                        "hostname"=>"node2",
+                        "provision"=>"centos_script.sh"}
+                    }
+    vm_configs.each do |vm_name,config_data|
+        config.vm.define vm_name do |vm_config|
+            vm_config.vm.box = config_data["box"]
+            if config_data["is_special"]
+                vm_config.vm.box_version = "1.0.0"
+            end
+            vm_config.vm.hostname = config_data["hostname"]
+            vm_config.vm.network "private_network", ip: "#{subnet}#{startIP}"
+            startIP += 1
+            vm_config.vm.provider "vmware_desktop" do |vd|
+                vd.gui = true
+            end
+            vm_config.vm.provision "shell", path: config_data["provision"]
+        end
+    end
+end
